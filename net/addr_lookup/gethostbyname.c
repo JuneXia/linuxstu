@@ -1,3 +1,4 @@
+// 参考资料：嵌入式linux应用程序开发详解
 #include <netdb.h>
 #include <sys/socket.h>
 #include <stdio.h>
