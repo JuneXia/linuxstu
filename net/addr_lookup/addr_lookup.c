@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <arpa/inet.h>
-// fuck you
+
 void print_family(struct addrinfo *aip)
 {
 	printf(" family ");
