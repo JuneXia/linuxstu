@@ -23,7 +23,7 @@ int main()
 	fd_set readfd; 
 	fd_set writefd; 
 	int sockfd,client_fd; 
-	char buf[MAXDATASIZE]; 
+	char buf[MAXDATASIZE] = {0};
 
 	if((sockfd = socket(AF_INET,SOCK_STREAM,0)) == -1)
 	{
@@ -50,14 +50,15 @@ int main()
 		exit(1); 
 	} 
 	printf("listening....\n"); 
-	FD_ZERO(&readfd);
 
 	/*将调用socket 函数的描述符作为文件描述符*/ 
 	while(1)
 	{
-		FD_SET(sockfd,&readfd);
 		printf("we will select\n");
-		sin_size=sizeof(struct sockaddr_in); 
+		FD_ZERO(&readfd);
+		FD_SET(sockfd,&readfd);
+
+		sin_size = sizeof(struct sockaddr_in); 
 		/*调用select 函数*/ 
 		struct timeval time;
 		time.tv_sec = 5;
@@ -76,10 +77,10 @@ int main()
 				} 
 
 				printf("we will recv\n");
-				if((recvbytes=recv(client_fd,buf,MAXDATASIZE,0)) == -1)
+				if((recvbytes = recv(client_fd, buf, MAXDATASIZE, 0)) == -1)
 				{
-					perror("recv"); 
-					exit(1); 
+					perror("recv");
+					exit(1);
 				}
 
 /*
@@ -91,14 +92,15 @@ int main()
 				} 
 */
 
-				printf("received a connection :%s\n",buf); 
+				printf("received a connection :%s\n",buf);
 
 				send(client_fd, buf, recvbytes, MSG_DONTWAIT);
+				memset(buf, 0, recvbytes);
 			}/*if*/ 
 			printf("we will close(client_fd)\n");
 			close(client_fd); 
 		}/*select*/ 
 		printf("select end\n");
-		FD_CLR(sockfd, &readfd);
+		//FD_CLR(sockfd, &readfd);
 	}/*while*/ 
 } 
